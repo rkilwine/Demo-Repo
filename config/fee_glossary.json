@@ -1,0 +1,10 @@
+{
+  "synthetic": true,
+  "version": "demo-2026-10-26",
+  "notice": "Illustrative demo wording only. No actual compliance approval is asserted. Not for client publication.",
+  "entries": {
+    "advisory_fee": {"explanation": "A fee for ongoing investment guidance and account management.", "status": "demo_reviewed"},
+    "fund_expense_ratio": {"explanation": "An operating amount reflected in a fund's returns, not a separate account bill.", "status": "in_review"},
+    "transaction_fee": {"explanation": "A charge that may apply when an investment is bought or sold.", "status": "demo_reviewed"}
+  }
+}

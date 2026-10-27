@@ -1,0 +1,25 @@
+name: Synthetic fee demo tests
+on:
+  push:
+    branches: [CU-868mnhw6a-fee-breakdown-demo]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Use runner Python and run standard-library tests
+        run: |
+          python3 --version
+          python3 -m unittest discover -s tests -v
+      - name: Run synthetic CLI scenarios
+        run: |
+          python3 -m src.fee_breakdown --case normal
+          python3 -m src.fee_breakdown --case half-cent
+          python3 -m src.fee_breakdown --case zero --hide-explanations
