@@ -1,7 +1,7 @@
-"""Synthetic demo only. No client data, network calls, or money movement."""
+'''Synthetic demo only. No client data, network calls, or money movement.'''
 import argparse
 import json
-from decimal import Decimal, ROUND_HALF_EVEN
+from decimal import Decimal
 from pathlib import Path
 from src.money import parse_amount, round_cents
 
@@ -16,12 +16,11 @@ def build_breakdown(fees, glossary=None, show_explanations=True):
     if not isinstance(fees, list) or not fees or len(fees) > 100:
         raise ValueError('fees must be a list of 1 to 100 items')
     glossary = load_glossary() if glossary is None else glossary
-    lines, raw_amounts = [], []
+    lines = []
     for fee in fees:
         if not isinstance(fee, dict) or fee.get('type') not in FEE_TYPES:
             raise ValueError('unsupported fee type')
         amount = parse_amount(fee.get('amount'))
-        raw_amounts.append(amount)
         entry = glossary.get('entries', {}).get(fee['type'])
         if show_explanations and not entry:
             raise ValueError('missing glossary entry')
@@ -31,8 +30,8 @@ def build_breakdown(fees, glossary=None, show_explanations=True):
             'explanation': entry['explanation'] if show_explanations else None,
             'wording_status': entry['status'] if show_explanations else 'hidden',
         })
-    # Staged defect for CU-868mnhw8a: raw total with half-even rounding.
-    total = sum(raw_amounts, Decimal('0')).quantize(Decimal('0.01'), rounding=ROUND_HALF_EVEN)
+    # CU-868mnhw8a: total equals the rounded lines actually displayed.
+    total = sum((Decimal(line['amount']) for line in lines), Decimal('0.00'))
     return {'synthetic': True, 'currency': 'USD', 'lines': lines, 'total': format(total, '.2f')}
 
 def main():
@@ -47,7 +46,7 @@ def main():
         case = next(item for item in accounts['cases'] if item['id'] == args.case)
         result = build_breakdown(case['fees'], load_glossary(args.glossary), not args.hide_explanations)
     except (OSError, ValueError, KeyError, StopIteration) as exc:
-        parser.exit(2, f'Invalid demo input: {exc}\n')
+        parser.exit(2, f'Invalid demo input: {exc}')
     print(json.dumps(result, indent=2))
 
 if __name__ == '__main__':
