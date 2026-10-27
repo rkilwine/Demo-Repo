@@ -1,0 +1,9 @@
+{
+  "synthetic": true,
+  "notice": "Invented scenarios only. No account identifiers or client records.",
+  "cases": [
+    {"id": "normal", "fees": [{"type": "advisory_fee", "amount": "12.34"}, {"type": "fund_expense_ratio", "amount": "3.33"}, {"type": "transaction_fee", "amount": "1.00"}], "expected_total": "16.67"},
+    {"id": "zero", "fees": [{"type": "advisory_fee", "amount": "0.00"}, {"type": "fund_expense_ratio", "amount": "0.00"}, {"type": "transaction_fee", "amount": "0.00"}], "expected_total": "0.00"},
+    {"id": "half-cent", "fees": [{"type": "advisory_fee", "amount": "12.345"}, {"type": "fund_expense_ratio", "amount": "3.335"}, {"type": "transaction_fee", "amount": "0.00"}], "expected_total": "15.69"}
+  ]
+}
